@@ -1,79 +1,81 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: source-han-sans-simplified-c, sans-serif;
+    font-style: normal;
+    font-size: 17px;
+    color: rgba(0, 0, 0, 0.88);
+    background-color: #fff;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+:root {
+    --theme-color: #5d26bd;
+    --theme-color-hover: #ccccd6;
+    --left-background: #fbfbfd;
+    --theme-divider: #d1d1d6;
+    --right-background-hover: #d1d1d6;
+    --left-background-hover: #e6e6eb
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+body, #app {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+/* 通用滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.card {
-  padding: 2em;
+::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: transparent;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
+/* 白天模式下的滚动条样式 */
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3); /* 半透明灰色 */
+        border-radius: 4px;
+        border: 2px solid transparent; /* 透明边框，使滚动条更细 */
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.5); /* 鼠标悬停时稍微加深颜色 */
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --theme-color: #8560ac;
+        --left-background: #202023;
+        --right-background-hover: #3c3c3e;
+        --left-background-hover: #343437;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3); /* 半透明白色 */
+        border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.5); /* 鼠标悬停时稍微加深颜色 */
+    }
+
+    :root {
+        color: #FFFFFF; /* 深色主题下的文本颜色 */
+        background-color: hsl(240, 3.4%, 11.4%);
+    }
 }
