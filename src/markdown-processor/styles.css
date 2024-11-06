@@ -1,0 +1,72 @@
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--theme-font-color);
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+    margin: 0.83em 0;
+}
+
+h4, h5, h6 {
+    font-weight: bold;
+}
+
+/* 列表 */
+ul, ol {
+    margin: 1em 0;
+    padding-left: 1.5em;
+}
+
+li {
+    margin: 0.5em 0;
+}
+
+/* 段落 */
+p {
+    margin: 1em 0;
+    line-height: 2;
+}
+
+/* 链接 */
+a {
+    color: #007acc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 图片 */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 代码块 */
+pre {
+    background: var(--left-background-hover);
+    padding: 1em;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+code {
+    font-family: monospace;
+    color: #d6336c;
+}
+
+/* 内嵌代码 */
+p code {
+    background: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
