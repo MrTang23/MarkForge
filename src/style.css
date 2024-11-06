@@ -2,17 +2,19 @@
     font-family: source-han-sans-simplified-c, sans-serif;
     font-style: normal;
     font-size: 17px;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--theme-font-color);
     background-color: #fff;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 
 :root {
     --theme-color: #5d26bd;
     --theme-color-hover: #ccccd6;
+    --theme-font-color: #000000E0;
     --left-background: #fbfbfd;
     --theme-divider: #d1d1d6;
     --right-background-hover: #d1d1d6;
@@ -58,6 +60,7 @@ body, #app {
 @media (prefers-color-scheme: dark) {
     :root {
         --theme-color: #8560ac;
+        --theme-font-color: #fff;
         --left-background: #202023;
         --right-background-hover: #3c3c3e;
         --left-background-hover: #343437;
@@ -75,7 +78,6 @@ body, #app {
     }
 
     :root {
-        color: #FFFFFF; /* 深色主题下的文本颜色 */
         background-color: hsl(240, 3.4%, 11.4%);
     }
 }
