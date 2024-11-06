@@ -1,48 +1,71 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain, dialog} from 'electron';
+import fs from 'fs/promises';  // 使用 Promise API
+import path from 'path';
 import {fileURLToPath} from 'url';
-import {join, dirname} from 'path';
 
 // 获取当前模块的文件名和目录
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 
 let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1000,
-        height: 800,
+        height: 700,
         webPreferences: {
-            preload: join('./preload.js'),
-            contextIsolation: true,  // 建议启用
-            nodeIntegration: false,  // 禁用 nodeIntegration 以提升安全性
-            enableRemoteModule: false, // 禁用 remote 模块，提升安全性
+            preload: path.join(__dirname, 'preload.js'),  // 确保路径正确
+            spellcheck: false,
+            contextIsolation: true,
+            nodeIntegration: false,
         },
     });
 
-    // 加载生成的 dist/index.html 文件
-    mainWindow.loadFile(join(__dirname, 'dist/index.html'));
-
-    // 打开开发者工具（可选）
+    mainWindow.loadFile('dist/index.html'); // 加载生成的 HTML 文件
+    // 自动打开开发者工具
     mainWindow.webContents.openDevTools();
-
-    mainWindow.on('closed', () => {
-        mainWindow = null;
-    });
 }
 
-app.whenReady().then(() => {
-    createWindow();
+app.whenReady().then(createWindow);
 
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
-        }
+// 处理文件或文件夹的选择
+ipcMain.handle('open-file-or-folder', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [
+            {name: 'Markdown Files', extensions: ['md']} // 只允许选择 .md 文件
+        ]
     });
+
+    if (result.canceled) {
+        return null;
+    } else {
+        return result.filePaths[0];
+    }
+});
+
+// 处理读取文件内容
+ipcMain.handle('read-file-or-folder', async (event, address) => {
+    try {
+        const stats = await fs.stat(address);
+        if (stats.isFile()) {
+            const content = await fs.readFile(address, 'utf-8');
+            return {type: 'file', content: content};
+        }
+    } catch (error) {
+        console.error(error);
+        return {error: 'Unable to read file'};
+    }
 });
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
     }
 });
