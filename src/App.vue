@@ -1,10 +1,6 @@
 <script setup>
 import Outline from "./components/Outline.vue";
-import {onMounted} from "vue";
-import router from "./router/index.js";
-onMounted(()=>{
 
-})
 </script>
 
 <template>

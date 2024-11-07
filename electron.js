@@ -11,7 +11,7 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1000,
+        width: 1200,
         height: 700,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),  // 确保路径正确
