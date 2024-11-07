@@ -18,7 +18,8 @@
     --left-background: #fbfbfd;
     --theme-divider: #d1d1d6;
     --right-background-hover: #d1d1d6;
-    --left-background-hover: #e6e6eb
+    --left-background-hover: #e6e6eb;
+    --code-background: #f0f2f4;
 }
 
 body, #app {
@@ -36,6 +37,7 @@ body, #app {
 /* 通用滚动条样式 */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -64,6 +66,8 @@ body, #app {
         --left-background: #202023;
         --right-background-hover: #3c3c3e;
         --left-background-hover: #343437;
+        --code-background: #29292CFF;
+
     }
 
     ::-webkit-scrollbar-thumb {

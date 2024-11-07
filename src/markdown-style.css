@@ -1,0 +1,136 @@
+/* markdown-styles.css */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    line-height: 1.2;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2em;
+    margin-top: 0.75em;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 1.75em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.25em;
+}
+
+h5 {
+    font-size: 1.1em;
+}
+
+h6 {
+    font-size: 1em;
+}
+
+/* 段落样式 */
+p {
+    margin: 1em 0;
+    line-height: 2;
+}
+
+/* 列表样式 */
+ul, ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+ul li, ol li {
+    margin: 0.5em 0;
+}
+
+/* 引用块 */
+blockquote {
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    border-left: 4px solid #d0d7de;
+    color: #6a737d;
+    background-color: #f6f8fa;
+}
+
+/* 链接样式 */
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 图片样式 */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em 0;
+}
+
+/* 代码块 */
+pre {
+    background: var(--code-background);
+    border-radius: 10px;
+    padding: 1em;
+    overflow-x: auto;
+}
+
+
+code {
+    font-family: "JetBrains Mono", monospace;
+    padding: 0.2em 0.4em;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* 删除线 */
+del {
+    text-decoration: line-through;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 0.5em 1em;
+    text-align: left;
+}
+
+th {
+    background-color: #f6f8fa;
+    font-weight: bold;
+}
+
+/* 任务列表 */
+input[type="checkbox"] {
+    margin-right: 0.5em;
+    vertical-align: middle;
+}
+
+/* 键盘文本 */
+kbd {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 0.1em 0.3em;
+    font-size: 90%;
+    font-family: monospace;
+    color: #333;
+}
