@@ -10,12 +10,16 @@ export default [
     {
         path: "/file",
         name: "file",
-        component: () => import("../components/FileContent.vue"),
+        component: () => import("../views/FileContent.vue"),
     },
     {
         path: "/",
         name: "welcome",
         component: () => import("../views/Welcome.vue"),
-
+    },
+    {
+        path: "/file-content",
+        name: "file-content",
+        component: () => import("../views/FileContent.vue"),
     }
 ];

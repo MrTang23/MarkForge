@@ -1,5 +1,18 @@
 <script setup>
+import router from "../router/index.js";
+import {onMounted} from "vue";
 
+onMounted(()=>{
+    router.push('/file-content')
+})
+
+const selectFileOrFolder = async () => {
+    const result = await window.electronAPI.openFileOrFolder();
+    if (!result.canceled) {
+        localStorage.setItem('address', result);
+        await router.push('/file-content')
+    }
+};
 </script>
 
 <template>
@@ -12,11 +25,11 @@
             <div class="content">
                 <div class="tool content-bar">
                     <div class="content-title">开始</div>
-                    <div class="content-list-left">
+                    <div class="content-list-left" @click="newFile">
                         <font-awesome-icon :icon="['fas', 'file-circle-plus']" class="content-list-icon"/>
                         新建文件
                     </div>
-                    <div class="content-list-left">
+                    <div class="content-list-left" @click="selectFileOrFolder">
                         <font-awesome-icon :icon="['far', 'folder-open']" class="content-list-icon"/>
                         打开文件夹
                     </div>
@@ -35,7 +48,6 @@
 .content-list-icon {
     margin-right: 10px;
     font-size: 16px;
-
 }
 
 .content-list-left {

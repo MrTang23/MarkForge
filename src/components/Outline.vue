@@ -5,39 +5,71 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const store = useStore();
 const outline = computed(() => store.getters.getOutline);
-const outlineLine = ref([]);
+const outlineLine = ref([]); //树状数组的线性表示
 
 onMounted(() => {
     flattenTree(outline.value)
+
 })
 
 const flattenTree = (tree) => {
-    outlineLine.value = []
+    outlineLine.value = [];
     const result = [];
 
-    function traverse(nodes, level = 1) {
-        nodes.forEach(node => {
-            // 将当前节点的 level 添加到节点对象中
+    function traverse(nodes, level = 1, parentId = null) {
+        nodes.forEach((node, index) => {
+            const id = `${parentId ? parentId + '-' : ''}${level}-${index}`; // 生成唯一的 id
             result.push({
                 ...node,
-                level
+                level,
+                id,
+                isExpanded: false // 默认每个节点的展开状态为 false
             });
 
             // 如果当前节点有子节点，递归遍历子节点，level + 1
             if (node.children && node.children.length > 0) {
-                traverse(node.children, level + 1);
+                traverse(node.children, level + 1, id); // 传递当前节点的 id 作为子节点的 parentId
             }
         });
     }
 
     traverse(tree);
-    console.log(tree, result)
     outlineLine.value = result;
+}
+
+const renderOpenLevel = () => {
+    for (let i = 0; i < outlineLine.value.length; i++) {
+        if (outlineLine.value[i].level <= 2) {
+            outlineLine.value[i].isExpanded = true;
+        }
+    }
+}
+
+const openOrCloseNode = (item) => {
+    // 查找当前节点在 outlineLine 中的索引
+    const nodeIndex = outlineLine.value.findIndex(i => i.id === item.id);
+    if (nodeIndex === -1) return;
+
+    const isCurrentlyExpanded = item.isExpanded;
+
+    // 遍历 outlineLine，处理当前节点的所有子节点
+    for (let i = nodeIndex + 1; i < outlineLine.value.length; i++) {
+        const currentNode = outlineLine.value[i];
+
+        // 判断当前节点是否是子节点：即 level 大于父节点的 level
+        if (currentNode.level > item.level) {
+            currentNode.isExpanded = !!isCurrentlyExpanded;
+        } else if (currentNode.level <= item.level) {
+            // 当遇到当前节点的同级或更高等级的节点时，结束遍历
+            break;
+        }
+    }
 }
 
 watch(outline, (newOutline) => {
     if (newOutline && newOutline.length > 0) {
         flattenTree(newOutline);
+        renderOpenLevel()
     }
 }, {immediate: true});
 
@@ -49,9 +81,10 @@ watch(outline, (newOutline) => {
         <div class="outline">
             <template v-for="item in outlineLine" :key="item.title">
                 <div class="outline-row" :class="{'outline-first': item.level === 1,'outline-second': item.level === 2}"
-                     :style="{ paddingLeft: `${(item.level - 1) * 20}px` }">
+                     :style="{ paddingLeft: `${(item.level - 1) * 20}px` }" v-if="item.isExpanded">
                     <FontAwesomeIcon :icon="['fas', 'chevron-down']" class="outline-title-icon"
-                                     :style="{ color: item.children.length > 0 ? 'inherit' : 'transparent' }"/>
+                                     :style="{ color: item.children.length > 0 ? 'inherit' : 'transparent' }"
+                                     @click="openOrCloseNode(item)"/>
                     <div class="outline-text">{{ item.title }}</div>
                 </div>
             </template>
