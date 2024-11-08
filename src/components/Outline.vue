@@ -45,27 +45,6 @@ const renderOpenLevel = () => {
     }
 }
 
-const openOrCloseNode = (item) => {
-    // 查找当前节点在 outlineLine 中的索引
-    const nodeIndex = outlineLine.value.findIndex(i => i.id === item.id);
-    if (nodeIndex === -1) return;
-
-    const isCurrentlyExpanded = item.isExpanded;
-
-    // 遍历 outlineLine，处理当前节点的所有子节点
-    for (let i = nodeIndex + 1; i < outlineLine.value.length; i++) {
-        const currentNode = outlineLine.value[i];
-
-        // 判断当前节点是否是子节点：即 level 大于父节点的 level
-        if (currentNode.level > item.level) {
-            currentNode.isExpanded = !!isCurrentlyExpanded;
-        } else if (currentNode.level <= item.level) {
-            // 当遇到当前节点的同级或更高等级的节点时，结束遍历
-            break;
-        }
-    }
-}
-
 watch(outline, (newOutline) => {
     if (newOutline && newOutline.length > 0) {
         flattenTree(newOutline);
@@ -83,8 +62,7 @@ watch(outline, (newOutline) => {
                 <div class="outline-row" :class="{'outline-first': item.level === 1,'outline-second': item.level === 2}"
                      :style="{ paddingLeft: `${(item.level - 1) * 20}px` }" v-if="item.isExpanded">
                     <FontAwesomeIcon :icon="['fas', 'chevron-down']" class="outline-title-icon"
-                                     :style="{ color: item.children.length > 0 ? 'inherit' : 'transparent' }"
-                                     @click="openOrCloseNode(item)"/>
+                                     :style="{ color: item.children.length > 0 ? 'inherit' : 'transparent' }"/>
                     <div class="outline-text">{{ item.title }}</div>
                 </div>
             </template>
