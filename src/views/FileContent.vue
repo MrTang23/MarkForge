@@ -3,6 +3,7 @@ import {onMounted, ref, watch} from 'vue';
 import {HtmlRenderer, Parser} from 'commonmark';
 import {useStore} from 'vuex';
 import {highlightCode} from '../utils/highlightConfig';
+import router from "../router/index.js";
 
 const store = useStore();
 const address = ref('');
@@ -30,21 +31,26 @@ watch(renderScrollTop, (newScrollTop) => {
 });
 
 onMounted(async () => {
-    address.value = localStorage.getItem('address');
+    let addressTemp = JSON.parse(localStorage.getItem('address'));
+    address.value = Array.isArray(addressTemp) ? addressTemp[0] : null;
     if (address.value) {
         try {
-            const result = await window.electronAPI.readFileOrFolder(address.value);
+            const result = await window.electronAPI.readFileOrFolder(address.value.path);
             if (result.type === 'directory') {
-                folderContents.value = result.contents;
+
             } else if (result.type === 'file') {
+                // 存储大纲
                 const outline = extractMarkdownOutline(result.content);
                 await store.dispatch('updateOutline', outline);
 
+                // 渲染markdown
                 markdownContent.value = result.content;
                 htmlOutput.value = markdownToHTML(result.content);
             }
         } catch (err) {
-            error.value = '文件或文件夹错误';
+            alert("文件或文件夹解析错误，无法打开")
+            await store.dispatch('updateShowOutline', false);
+            router.back()
         }
     }
 });
