@@ -3,7 +3,7 @@ import router from "../router/index.js";
 import {onMounted} from "vue";
 
 onMounted(()=>{
-    router.push('/file-content')
+    //router.push('/file-content')
 })
 
 const selectFileOrFolder = async () => {
