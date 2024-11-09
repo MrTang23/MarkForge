@@ -13,7 +13,7 @@ const store = createStore({
             state.outline = outline;
         },
         setShowOutline(state, showOutline) {
-            state.showOutlineutline = showOutline;
+            state.showOutline = showOutline;
         }
     },
     actions: {
