@@ -2,6 +2,7 @@
 import {computed, onMounted, ref, watch} from 'vue';
 import {useStore} from 'vuex';
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import router from "../router/index.js";
 
 const store = useStore();
 const outline = computed(() => store.getters.getOutline);
@@ -9,7 +10,6 @@ const outlineLine = ref([]); //树状数组的线性表示
 
 onMounted(() => {
     flattenTree(outline.value)
-
 })
 
 const flattenTree = (tree) => {
@@ -45,6 +45,11 @@ const renderOpenLevel = () => {
     }
 }
 
+const backWelcome = () => {
+    store.dispatch("updateShowOutline", false)
+    router.back()
+}
+
 watch(outline, (newOutline) => {
     if (newOutline && newOutline.length > 0) {
         flattenTree(newOutline);
@@ -56,7 +61,10 @@ watch(outline, (newOutline) => {
 
 <template>
     <div class="outline-main">
-        <header class="header">大纲</header>
+        <header class="header">
+            <FontAwesomeIcon :icon="['fas', 'circle-chevron-left']" @click="backWelcome" class="back"/>
+            大纲
+        </header>
         <div class="outline">
             <template v-for="item in outlineLine" :key="item.title">
                 <div class="outline-row" :class="{'outline-first': item.level === 1,'outline-second': item.level === 2}"
@@ -71,6 +79,12 @@ watch(outline, (newOutline) => {
 </template>
 
 <style scoped>
+.back {
+    position: absolute;
+    cursor: pointer;
+    left: 10px;
+}
+
 .outline-main {
     display: flex;
     flex-direction: column;
