@@ -1,4 +1,5 @@
 <script setup>
+// TODO: 文件保存
 import {computed, onMounted, ref, watch} from 'vue';
 import {HtmlRenderer, Parser} from 'commonmark';
 import {useStore} from 'vuex';
@@ -41,6 +42,7 @@ watch(renderScrollTop, (newScrollTop) => {
 
 // 处理内容变化
 const onInputChange = (event) => {
+    // TODO: 回车后光标跳回开头
     itemContent.value.content = event.target.innerText;
     htmlOutput.value = markdownToHTML(event.target.innerText);
 };

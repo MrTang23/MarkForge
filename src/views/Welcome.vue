@@ -1,5 +1,4 @@
 <script setup>
-// TODO: 新建文件
 // TODO: 选择文件夹后的处理
 import router from "../router/index.js";
 import {onMounted, ref} from "vue";
