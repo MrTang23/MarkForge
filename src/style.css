@@ -3,7 +3,7 @@
     font-style: normal;
     font-size: 17px;
     color: var(--theme-font-color);
-    background-color: #fff;
+    background-color: var(--theme-background);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -12,6 +12,7 @@
 }
 
 :root {
+    --theme-background: #fff;
     --theme-color: #5d26bd;
     --theme-color-hover: #ccccd6;
     --theme-font-color: #000000E0;
@@ -61,6 +62,7 @@ body, #app {
 
 @media (prefers-color-scheme: dark) {
     :root {
+        --theme-background: #1C1C1EFF;
         --theme-color: #8560ac;
         --theme-font-color: #fff;
         --left-background: #202023;
@@ -79,9 +81,5 @@ body, #app {
 
     ::-webkit-scrollbar-thumb:hover {
         background-color: rgba(255, 255, 255, 0.5); /* 鼠标悬停时稍微加深颜色 */
-    }
-
-    :root {
-        background-color: hsl(240, 3.4%, 11.4%);
     }
 }
