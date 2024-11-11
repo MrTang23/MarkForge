@@ -91,7 +91,6 @@ const extractMarkdownOutline = (markdownContent) => {
 
 const selectFileOrFolder = async () => {
     const result = await window.electronAPI.openFileOrFolder();
-    console.log(result);
     if (result) {
         await jumpFileContent(result)
     }
@@ -101,8 +100,15 @@ const openItem = (item) => {
     jumpFileContent(item)
 }
 
-const newFile = () => {
+const newFile = async () => {
     // 新建文件只有在用户编辑并保存后才添加到最近打开数组中
+    const outline = extractMarkdownOutline("# 新建 Markdown 文件");
+    await store.dispatch('updateOutline', outline);
+    await store.dispatch('updateItemContent', {
+        type: 'file',
+        content: "# 新建 Markdown 文件"
+    });
+    await router.push('/file-content')
 }
 </script>
 
