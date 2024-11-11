@@ -41,16 +41,9 @@ const readContent = async (address) => {
                 type: 'folder'
             });
         } else if (result.type === 'file') {
-            // 存储大纲
             const outline = extractMarkdownOutline(result.content);
             await store.dispatch('updateOutline', outline);
-
-            // 渲染markdown
-            result.content;
-            await store.dispatch('updateItemContent', {
-                type: 'file',
-                markdownContent: result.content,
-            });
+            await store.dispatch('updateItemContent', result);
         }
         return true
     } catch (err) {
