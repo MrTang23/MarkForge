@@ -3,7 +3,7 @@ import './style.css'
 import './markdown-style.css'
 import App from './App.vue'
 import router from './router';
-import store from './store';
+import store from './utils/store.js';
 
 // font awesome 配置
 import {library, config} from '@fortawesome/fontawesome-svg-core'

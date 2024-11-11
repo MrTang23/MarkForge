@@ -1,14 +1,14 @@
 <script setup>
 // TODO: 新建文件
-// TODO: 直接打开最近文件
 // TODO: 选择文件夹后的处理
 import router from "../router/index.js";
 import {onMounted, ref} from "vue";
-import store from "../store.js";
+import store from "../utils/store.js";
 
 const recentOpenList = ref([])
 
 onMounted(() => {
+    store.dispatch('updateShowOutline', false)
     let address = localStorage.getItem('address');
     try {
         address = JSON.parse(address);
@@ -23,17 +23,82 @@ onMounted(() => {
 })
 
 const jumpFileContent = async (fileObject) => {
-    recentOpenList.value.unshift(fileObject)
-    if (recentOpenList.value.length > 8) {
-        recentOpenList.value.splice(8); // 删除超过 8 条数据后的所有内容
+    if (await readContent(fileObject.path)) {
+        recentOpenList.value.unshift(fileObject)
+        if (recentOpenList.value.length > 8) {
+            recentOpenList.value.splice(8); // 删除超过 8 条数据后的所有内容
+        }
+        localStorage.setItem('address', JSON.stringify(recentOpenList.value));
+        await router.push('/file-content')
     }
-    localStorage.setItem('address', JSON.stringify(recentOpenList.value));
-    await store.dispatch('updateShowOutline', true);
-    await router.push('/file-content')
 }
+
+const readContent = async (address) => {
+    try {
+        const result = await window.electronAPI.readFileOrFolder(address);
+        if (result.type === 'directory') {
+            await store.dispatch('updateItemContent', {
+                type: 'folder'
+            });
+        } else if (result.type === 'file') {
+            // 存储大纲
+            const outline = extractMarkdownOutline(result.content);
+            await store.dispatch('updateOutline', outline);
+
+            // 渲染markdown
+            result.content;
+            await store.dispatch('updateItemContent', {
+                type: 'file',
+                markdownContent: result.content,
+            });
+        }
+        return true
+    } catch (err) {
+        alert("文件或文件夹解析错误，无法打开")
+        return false
+    }
+}
+
+// 提取 Markdown 大纲的函数
+const extractMarkdownOutline = (markdownContent) => {
+    const lines = markdownContent.split('\n');
+    const outlineTree = [];
+    const outlineStack = [];
+
+    lines.forEach(line => {
+        const match = line.match(/^(#{1,6})\s+(.*)/);  // 匹配 Markdown 标题
+        if (match) {
+            const level = match[1].length;  // 标题层级 (1-6)
+            const title = match[2].trim();  // 标题文本
+
+            const newNode = {
+                level: level,
+                title: title,
+                children: []
+            };
+
+            if (outlineStack.length === 0 || level === 1) {
+                outlineTree.push(newNode);
+                outlineStack.length = 0; // 清空栈，准备存储新的一级标题及其子级
+                outlineStack.push(newNode);
+            } else {
+                while (outlineStack.length > 0 && outlineStack[outlineStack.length - 1].level >= level) {
+                    outlineStack.pop();
+                }
+                if (outlineStack.length > 0) {
+                    outlineStack[outlineStack.length - 1].children.push(newNode);
+                }
+                outlineStack.push(newNode);
+            }
+        }
+    });
+
+    return outlineTree;  // 返回树状结构的大纲
+};
 
 const selectFileOrFolder = async () => {
     const result = await window.electronAPI.openFileOrFolder();
+    console.log(result);
     if (result) {
         await jumpFileContent(result)
     }
@@ -41,6 +106,10 @@ const selectFileOrFolder = async () => {
 
 const openItem = (item) => {
     jumpFileContent(item)
+}
+
+const newFile = () => {
+    // 新建文件只有在用户编辑并保存后才添加到最近打开数组中
 }
 </script>
 

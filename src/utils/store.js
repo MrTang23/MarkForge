@@ -1,11 +1,11 @@
-// src/store.js
 import {createStore} from 'vuex';
 
 const store = createStore({
     state() {
         return {
             outline: [],  // 存储 Markdown 大纲
-            showOutline: false
+            showOutline: false,
+            itemContent: {}
         };
     },
     mutations: {
@@ -14,14 +14,20 @@ const store = createStore({
         },
         setShowOutline(state, showOutline) {
             state.showOutline = showOutline;
+        },
+        setItemContent(state, itemContent) {
+            state.itemContent = itemContent;
         }
     },
     actions: {
         updateOutline({commit}, outline) {
-            commit('setOutline', outline);  // 通过 commit mutation 来更新大纲
+            commit('setOutline', outline);
         },
         updateShowOutline({commit}, showOutline) {
             commit('setShowOutline', showOutline);
+        },
+        updateItemContent({commit}, itemContent) {
+            commit('setItemContent', itemContent);
         }
     },
     getters: {
@@ -30,6 +36,9 @@ const store = createStore({
         },
         getShowOutline(state) {
             return state.showOutline;
+        },
+        getItemContent(state) {
+            return state.itemContent;
         }
     }
 });

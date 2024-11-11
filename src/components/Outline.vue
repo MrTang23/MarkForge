@@ -46,7 +46,6 @@ const renderOpenLevel = () => {
 }
 
 const backWelcome = () => {
-    store.dispatch("updateShowOutline", false)
     router.back()
 }
 
