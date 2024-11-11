@@ -22,18 +22,26 @@ onMounted(() => {
     }
 })
 
+const jumpFileContent = async (fileObject) => {
+    recentOpenList.value.unshift(fileObject)
+    if (recentOpenList.value.length > 8) {
+        recentOpenList.value.splice(8); // 删除超过 8 条数据后的所有内容
+    }
+    localStorage.setItem('address', JSON.stringify(recentOpenList.value));
+    await store.dispatch('updateShowOutline', true);
+    await router.push('/file-content')
+}
+
 const selectFileOrFolder = async () => {
     const result = await window.electronAPI.openFileOrFolder();
     if (result) {
-        recentOpenList.value.unshift(result)
-        if (recentOpenList.value.length > 8) {
-            recentOpenList.value.splice(8); // 删除超过 8 条数据后的所有内容
-        }
-        localStorage.setItem('address', JSON.stringify(recentOpenList.value));
-        await store.dispatch('updateShowOutline', true);
-        await router.push('/file-content')
+        await jumpFileContent(result)
     }
 };
+
+const openItem = (item) => {
+    jumpFileContent(item)
+}
 </script>
 
 <template>
@@ -59,7 +67,7 @@ const selectFileOrFolder = async () => {
                     <div class="content-title">最近</div>
                     <div v-for="(item,index) in recentOpenList" :key="item.name+index">
                         <div class="content-row-right" :title="item.path">
-                            <div @click="openItem" class="content-list-left"> {{ item.name }}</div>
+                            <div @click="openItem(item)" class="content-list-left"> {{ item.name }}</div>
                             <div class="recent-path">{{ item.path }}</div>
                         </div>
                     </div>
