@@ -10,15 +10,18 @@ const htmlOutput = ref('');  // 存储HTML 输出
 const editorScrollTop = ref(0); // 记录编辑区的滚动位置
 const renderScrollTop = ref(0); // 记录渲染区的滚动位置
 
-watch(itemContent, (newItemContent) => {
-    itemContent.value = newItemContent;
-    try {
-        htmlOutput.value = markdownToHTML("# 123");
-    } catch (error) {
-        alert(error.message);
-        router.back();
-    }
-}, {immediate: true});
+onMounted(async () => {
+    await store.dispatch('updateShowOutline', true);
+    watch(itemContent, (newItemContent) => {
+        itemContent.value = newItemContent;
+        try {
+            htmlOutput.value = markdownToHTML(itemContent.value.content);
+        } catch (error) {
+            alert(error.message);
+            router.back();
+        }
+    }, {immediate: true});
+});
 
 // 将编辑区的滚动位置同步到渲染区
 watch(editorScrollTop, (newScrollTop) => {
@@ -36,13 +39,9 @@ watch(renderScrollTop, (newScrollTop) => {
     }
 });
 
-onMounted(async () => {
-    await store.dispatch('updateShowOutline', true);
-});
-
 // 处理内容变化
 const onInputChange = (event) => {
-    itemContent.value.markdownContent = event.target.innerText;
+    itemContent.value.content = event.target.innerText;
     htmlOutput.value = markdownToHTML(event.target.innerText);
 };
 
@@ -72,7 +71,7 @@ const syncScroll = (event) => {
     <div class="main">
         <div class="editor" @scroll="syncScroll">
             <div class="editor-text" contenteditable="true" @input="onInputChange" ref="editorElement">
-                {{ itemContent.markdownContent }}
+                {{ itemContent.content }}
             </div>
         </div>
         <div class="render" @scroll="syncScroll">
